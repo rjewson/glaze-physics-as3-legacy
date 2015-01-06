@@ -1,0 +1,48 @@
+<project name="Glaze Physics Engine" default="All" basedir="..">
+
+    <!-- import our build properties file -->
+    <property file="${basedir}/build/build.properties" />
+	
+    <property name="bin.dir" value="${basedir}/bin" />
+    <property name="source.dir" value="${basedir}/src" />
+    <property name="docs.dir" value="${basedir}/doc" />
+    <property name="library.name" value="glazeCore.swc" />
+
+    <property name="flexbindir" value="${FLEX_HOME}/bin" />
+    <property name="flexlibsdir" value="${FLEX_HOME}/frameworks/libs" />
+    <property name="asdoc" value="${flexbindir}/${asdoc.exe}" />
+    <property name="compc" value="${flexbindir}/${compc.exe}" />
+
+    <target name="All" description="Creates the Glaze Release SWC" depends="Build,Distribute">
+    </target>
+
+    <target name="Build" description="Generates a swc of the Glaze Physics Engine">
+        <echo>Generating ${library.name}</echo>
+        <exec executable="${compc}">
+            <arg line="-compiler.debug=false" />
+            <arg line="-source-path ${source.dir}" />
+            <arg line="-output ${bin.dir}/${library.name}" />
+            <arg line="-include-sources ${source.dir}" />
+        </exec>
+    </target>
+	
+	<target name="Distribute" description="Distribute to local directories">
+		<copy file="${bin.dir}/${library.name}" todir="../glaze-game-engine/lib"/>
+		<copy file="${bin.dir}/${library.name}" todir="../glaze-demos/lib"/>
+	</target>
+
+	<target name="Clean Document" description="Delete ASDocs">
+	    <delete includeemptydirs="true">
+	        <fileset dir="${docs.dir}" includes="**/*" />
+	    </delete>
+	</target>
+
+	<target name="Document" description="Create ASDocs">
+		<exec executable="${asdoc}">
+	       <arg line="-doc-sources ${source.dir}" />
+	       <arg line="-include-all-for-asdoc" />
+	       <arg line="-output ${docs.dir}" />
+    	</exec>
+	</target>
+	
+</project>
